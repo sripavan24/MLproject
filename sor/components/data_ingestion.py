@@ -9,7 +9,8 @@ import pandas as pd
 
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
-
+from sor.components.data_tranasformatin import DataTransformation
+from sor.components.data_tranasformatin import Datatramsformationcogig
 
 @dataclass
 class dataingestioncofig:
@@ -49,5 +50,7 @@ class Dataingestion:
         
 if __name__=="__main__":
     ooj=Dataingestion()
-    ooj.initiate_data_ingestion() 
+    train_data,test_data=ooj.initiate_data_ingestion() 
 
+    data_transformation=DataTransformation()
+    data_transformation.initiate_data_transformation(train_data,test_data)
