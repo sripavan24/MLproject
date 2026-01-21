@@ -12,6 +12,10 @@ from dataclasses import dataclass
 from sor.components.data_tranasformatin import DataTransformation
 from sor.components.data_tranasformatin import Datatramsformationcogig
 
+from sor.components.model_trainer import ModelTrainer
+from sor.components.model_trainer import Modeltrainercongif
+
+
 @dataclass
 class dataingestioncofig:
     tarin_path: str=os.path.join("artifacts","train_data.csv")
@@ -29,7 +33,17 @@ class Dataingestion:
 
             logging.info("read dataset as dataframe")
             
-            os.makedirs(os.path.dirname(self.ingestion.raw_data_path),exist_ok=True)
+            df = df.rename(columns={
+            "race/ethnicity": "race_ethnicity",
+            "parental level of education": "parental_level_of_education",
+            "test preparation course": "test_preparation_course",
+            "math score":"math_score",
+            "reading score": "reading_score",
+            "writing score": "writing_score"
+            
+            })
+            
+            os.makedirs(os.path.dirname(self.ingestion.tarin_path),exist_ok=True)
 
             df.to_csv(self.ingestion.raw_data_path,index=False,header=True)
             
@@ -53,4 +67,7 @@ if __name__=="__main__":
     train_data,test_data=ooj.initiate_data_ingestion() 
 
     data_transformation=DataTransformation()
-    data_transformation.initiate_data_transformation(train_data,test_data)
+    train_arr,test_arr,_=data_transformation.initiate_data_transformation(train_data,test_data)
+
+    modeltrainer=ModelTrainer()
+    print(modeltrainer.initiate_model_trainer(train_arr,test_arr))
